@@ -1,17 +1,22 @@
 class TicTacToe {
     constructor(size = 3) {
-        this.field = Array.apply(null, Array(size)).map(() => Array.apply(null, Array(size)).map(() => null));
+        this.size = size;
+        this.field = [];
+        for (let i = 0; i < size; i++) {
+            this.field[i] = [];
+            for (let j = 0; j < size; j++) {
+                this.field[i][j] = null;
+            }
+        }
         this.turn = 0;
         this.players = ['x', 'o'];
     }
 
     getCurrentPlayerSymbol() {
-        /*        console.log(this.players[this.turn % 2]);*/
         return this.players[this.turn % 2];
     }
 
     nextTurn(rowIndex, columnIndex) {
-        /*        console.log(this.turn + " player: " + this.players[this.turn % 2]);*/
         if (!this.getFieldValue(rowIndex, columnIndex)) {
             this.field[rowIndex][columnIndex] = this.getCurrentPlayerSymbol();
             this.turn++;
@@ -19,25 +24,42 @@ class TicTacToe {
     }
 
     isFinished() {
-        if (this.getWinner() === true) {
-            return this.getWinner();
-        } else {
-            return null;
-        }
+        return this.getWinner() !== null || this.noMoreTurns();
     }
 
     getWinner() {
         let i, j;
-        for (i = 0; i < this.field.length; i++) {
-            for (j = 0; j < this.field.length; j++) {
-                if (this.field[i].every(cell => cell === this.field[i][0]) || this.field.every(row => row[j] = this.field[0][j]) || this.field[i][i] === this.getCurrentPlayerSymbol()) {
-                    return this.getCurrentPlayerSymbol();
+        let primaryDiagonal = this.field[0][0];
+        let secondaryDiagonal = this.field[0][this.size - 1];
+        for (i = 0; i < this.size; i++) {
+            let row = this.field[i][0];
+            let col = this.field[0][i];
+            //Check primary diagonal
+            if (this.field[i][i] !== primaryDiagonal) {
+                primaryDiagonal = null;
+            }
+            //Check secondary diagonal
+            if (this.field[i][this.size - i - 1] !== secondaryDiagonal) {
+                secondaryDiagonal = null;
+            }
+
+            for (j = 0; j < this.size; j++) {
+                //Check row
+                if (this.field[i][j] !== row) {
+                    row = null;
                 }
-                else {
-                    return null;
+                //Check col
+                if (this.field[j][i] !== col) {
+                    col = null;
                 }
             }
+            //If got row or col match, we have a winner
+            if (row || col) {
+                return row || col;
+            }
         }
+        //finally, if any diagonal matches, return it
+        return primaryDiagonal || secondaryDiagonal;
     }
 
     noMoreTurns() {
@@ -45,17 +67,11 @@ class TicTacToe {
     }
 
     isDraw() {
-        if (this.isFinished() === false || this.getWinner() === true) {
-            return false;
-        } else {
-            return true;
-        }
-
+        return this.noMoreTurns() && !this.getWinner();
     }
 
     getFieldValue(rowIndex, colIndex) {
         return this.field[rowIndex][colIndex];
-
     }
 }
 
