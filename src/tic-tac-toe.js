@@ -11,6 +11,7 @@ class TicTacToe {
     }
 
     nextTurn(rowIndex, columnIndex) {
+        /*        console.log(this.turn + " player: " + this.players[this.turn % 2]);*/
         if (!this.getFieldValue(rowIndex, columnIndex)) {
             this.field[rowIndex][columnIndex] = this.getCurrentPlayerSymbol();
             this.turn++;
@@ -18,62 +19,24 @@ class TicTacToe {
     }
 
     isFinished() {
-        if (this.noMoreTurns() === false) {
-            return false;
+        if (this.getWinner() === true) {
+            return this.getWinner();
         } else {
-            return true;
+            return null;
         }
     }
 
     getWinner() {
-        let win = false;
-        let rowIndex, colIndex;
-        for (rowIndex = 0; rowIndex < this.field.length; rowIndex) {
-            for (colIndex = 0; colIndex < this.field[0].length - 1; colIndex++) {
-                if (win !== this.field.length && this.field[rowIndex][colIndex] === this.field[rowIndex][colIndex + 1]) {
-                    win = win + 1;
-                } else if (win === this.field.length) {
-                    break;
+        let i, j;
+        for (i = 0; i < this.field.length; i++) {
+            for (j = 0; j < this.field.length; j++) {
+                if (this.field[i].every(cell => cell === this.field[i][0]) || this.field.every(row => row[j] = this.field[0][j]) || this.field[i][i] === this.getCurrentPlayerSymbol()) {
+                    return this.getCurrentPlayerSymbol();
                 }
                 else {
-                    continue;
+                    return null;
                 }
-                return (win === this.field.length);
             }
-        }
-        for (colIndex = 0; colIndex < this.field[0].length; colIndex++) {
-            for (rowIndex = 0; rowIndex < this.field.length - 1; rowIndex) {
-                if (win !== this.field.length && this.field[rowIndex][colIndex] === this.field[rowIndex + 1][colIndex]) {
-                    win = win + 1;
-                } else if (win === this.field.length) {
-                    break;
-                }
-                else {
-                    continue;
-                }
-                return (win === this.field.length);
-            }
-        }
-        for (colIndex = 0; colIndex < this.field[0].length - 1; colIndex++) {
-            for (rowIndex = 0; rowIndex < this.field.length - 1; rowIndex) {
-                let win = false;
-                if (win !== this.field.length && colIndex === rowIndex && this.field[rowIndex][colIndex] === this.field[rowIndex + 1][colIndex + 1]) {
-                    win = win + 1;
-                } else if (win === this.field.length) {
-                    break;
-                }
-                else {
-                    continue;
-                }
-                return (win === this.field.length);
-            }
-        }
-        if (win === this.field.length){
-            console.log(this.field[rowIndex][colIndex]);
-            return this.field[rowIndex][colIndex];
-        } else {
-            console.log(null);
-            return null;
         }
     }
 
@@ -82,10 +45,10 @@ class TicTacToe {
     }
 
     isDraw() {
-        if (this.isFinished() === false || this.getWinner() === false) {
-            return true;
-        } else {
+        if (this.isFinished() === false || this.getWinner() === true) {
             return false;
+        } else {
+            return true;
         }
 
     }
