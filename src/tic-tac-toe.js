@@ -1,12 +1,12 @@
 class TicTacToe {
     constructor(size = 3) {
-        this.field = new Array(size).map(() => new Array(size).map(() => null));
+        this.field = Array.apply(null, Array(size)).map(() => Array.apply(null, Array(size)).map(() => null));
         this.turn = 0;
         this.players = ['x', 'o'];
     }
 
     getCurrentPlayerSymbol() {
-        console.log(this.players[this.turn % 2]);
+        /*        console.log(this.players[this.turn % 2]);*/
         return this.players[this.turn % 2];
     }
 
@@ -18,10 +18,10 @@ class TicTacToe {
     }
 
     isFinished() {
-        if (this.noMoreTurns() === true || this.getWinner() === true) {
-            return true;
-        } else {
+        if (this.noMoreTurns() === false) {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -68,7 +68,13 @@ class TicTacToe {
                 return (win === this.field.length);
             }
         }
-        return (win === this.field.length);
+        if (win === this.field.length){
+            console.log(this.field[rowIndex][colIndex]);
+            return this.field[rowIndex][colIndex];
+        } else {
+            console.log(null);
+            return null;
+        }
     }
 
     noMoreTurns() {
@@ -76,7 +82,7 @@ class TicTacToe {
     }
 
     isDraw() {
-        if (this.isFinished() === true && this.getWinner() === false){
+        if (this.isFinished() === false || this.getWinner() === false) {
             return true;
         } else {
             return false;
@@ -85,7 +91,6 @@ class TicTacToe {
     }
 
     getFieldValue(rowIndex, colIndex) {
-        console.log(this.field[rowIndex][colIndex]);
         return this.field[rowIndex][colIndex];
 
     }
